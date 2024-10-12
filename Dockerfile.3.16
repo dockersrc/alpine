@@ -61,7 +61,7 @@ ENV TZ="${TIMEZONE}"
 ENV TIMEZONE="${TZ}"
 ENV LANG="${LANGUAGE}"
 ENV TERM="xterm-256color"
-ENV HOSTNAME="casjaysdevdocker-alpine"
+ENV HOSTNAME="casjaysdev-alpine"
 
 USER ${USER}
 WORKDIR /root
@@ -223,12 +223,12 @@ LABEL org.opencontainers.image.license="${LICENSE}"
 LABEL org.opencontainers.image.build-date="${BUILD_DATE}"
 LABEL org.opencontainers.image.version="${BUILD_VERSION}"
 LABEL org.opencontainers.image.schema-version="${BUILD_VERSION}"
-LABEL org.opencontainers.image.url="https://hub.docker.com/r/casjaysdevdocker/alpine"
-LABEL org.opencontainers.image.url.source="https://hub.docker.com/r/casjaysdevdocker/alpine"
+LABEL org.opencontainers.image.url="https://hub.docker.com/r/casjaysdev/alpine"
+LABEL org.opencontainers.image.url.source="https://hub.docker.com/r/casjaysdev/alpine"
 LABEL org.opencontainers.image.vcs-type="Git"
 LABEL org.opencontainers.image.vcs-ref="${BUILD_VERSION}"
-LABEL org.opencontainers.image.vcs-url="https://github.com/casjaysdevdocker/alpine"
-LABEL org.opencontainers.image.documentation="https://github.com/casjaysdevdocker/alpine"
+LABEL org.opencontainers.image.vcs-url="https://github.com/dockersrc/alpine"
+LABEL org.opencontainers.image.documentation="https://github.com/dockersrc/alpine"
 LABEL com.github.containers.toolbox="false"
 
 ENV ENV=~/.bashrc

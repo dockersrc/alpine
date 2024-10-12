@@ -13,25 +13,24 @@ alpine README
 ## Automatic install/update  
   
 ```shell
-dockermgr update alpine
+dockermgr update os alpine
 ```
   
 ## Install and run container
   
 ```shell
-mkdir -p "$HOME/.local/share/srv/docker/alpine/rootfs"
+mkdir -p "/var/lib/srv/root/docker/casjaysdev/alpine/latest"
 git clone "https://github.com/dockermgr/alpine" "$HOME/.local/share/CasjaysDev/dockermgr/alpine"
-cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/alpine/rootfs/." "$HOME/.local/share/srv/docker/alpine/rootfs/"
+cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/alpine/rootfs/." "/var/lib/srv/root/docker/casjaysdev/alpine/latest/"
 docker run -d \
 --restart always \
 --privileged \
---name casjaysdevdocker-alpine \
+--name casjaysdev-alpine-latest \
 --hostname alpine \
 -e TZ=${TIMEZONE:-America/New_York} \
--v "$HOME/.local/share/srv/docker/casjaysdevdocker-alpine/rootfs/data:/data:z" \
--v "$HOME/.local/share/srv/docker/casjaysdevdocker-alpine/rootfs/config:/config:z" \
--p 80:80 \
-casjaysdevdocker/alpine:latest
+-v "/var/lib/srv/root/docker/casjaysdev/alpine/latest/data:/data:z" \
+-v "/var/lib/srv/root/docker/casjaysdev/alpine/latest/config:/config:z" \
+casjaysdev/alpine:latest
 ```
   
 ## via docker-compose  
@@ -40,39 +39,31 @@ casjaysdevdocker/alpine:latest
 version: "2"
 services:
   ProjectName:
-    image: casjaysdevdocker/alpine
-    container_name: casjaysdevdocker-alpine
+    image: casjaysdev/alpine
+    container_name: casjaysdev-alpine-latest
     environment:
       - TZ=America/New_York
       - HOSTNAME=alpine
     volumes:
-      - "$HOME/.local/share/srv/docker/casjaysdevdocker-alpine/rootfs/data:/data:z"
-      - "$HOME/.local/share/srv/docker/casjaysdevdocker-alpine/rootfs/config:/config:z"
-    ports:
-      - 80:80
+      - "/var/lib/srv/root/docker/casjaysdev/alpine/latest/data:/data:z"
+      - "/var/lib/srv/root/docker/casjaysdev/alpine/latest/config:/config:z"
     restart: always
 ```
   
 ## Get source files  
   
 ```shell
-dockermgr download src casjaysdevdocker/alpine
-```
-  
-OR
-  
-```shell
-git clone "https://github.com/casjaysdevdocker/alpine" "$HOME/Projects/github/casjaysdevdocker/alpine"
+dockermgr download src os alpine
 ```
   
 ## Build container  
   
 ```shell
-cd "$HOME/Projects/github/casjaysdevdocker/alpine"
-buildx 
+git clone "https://github.com/dockersrc/alpine" "$HOME/Projects/github/dockersrc/alpine"
+cd "$HOME/Projects/github/dockersrc/alpine" && buildx all 
 ```
   
 ## Authors  
   
 🤖 casjay: [Github](https://github.com/casjay) 🤖  
-⛵ casjaysdevdocker: [Github](https://github.com/casjaysdevdocker) [Docker](https://hub.docker.com/u/casjaysdevdocker) ⛵  
+⛵ casjaysdevdocker: [Github](https://github.com/dockersrc) [Docker](https://hub.docker.com/u/casjaysdevdocker) ⛵  
