@@ -1,4 +1,4 @@
-name: release-tag
+name: alpine-3.18
 
 on: push
 
