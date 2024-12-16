@@ -3,7 +3,7 @@ name: alpine-edge
 on: push
 
 jobs:
-  release-image:
+  alpine-edge:
     runs-on: act_runner
     container:
       image: catthehacker/ubuntu:act-latest

@@ -1,9 +1,9 @@
-name: alpine-3.20
+name: alpine-3-20
 
 on: push
 
 jobs:
-  release-image:
+  alpine-3-20:
     runs-on: act_runner
     container:
       image: catthehacker/ubuntu:act-latest
