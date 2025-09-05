@@ -743,8 +743,7 @@ __exec_command() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup the server init scripts
 __start_init_scripts() {
-  # Remove set -e to let individual scripts handle their own errors properly
-  trap 'echo "❌ Fatal error in service startup"; rm -f /run/__start_init_scripts.pid; exit 1' ERR
+  # Let individual scripts handle their own errors - don't use global error traps
   
   [ "$1" = " " ] && shift 1
   [ "$DEBUGGER" = "on" ] && echo "Enabling debugging" && set -o pipefail -x$DEBUGGER_OPTIONS || set -o pipefail
