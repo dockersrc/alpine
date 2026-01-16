@@ -21,7 +21,7 @@ dockermgr update os alpine
 ```shell
 mkdir -p "/var/lib/srv/root/docker/casjaysdev/alpine/latest"
 git clone "https://github.com/dockermgr/alpine" "$HOME/.local/share/CasjaysDev/dockermgr/alpine"
-cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/alpine/rootfs/." "/var/lib/srv/root/docker/casjaysdev/alpine/latest/"
+cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/alpine/dockerfs/." "/var/lib/srv/root/docker/casjaysdev/alpine/latest/"
 docker run -d \
 --restart always \
 --privileged \

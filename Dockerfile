@@ -1,0 +1,114 @@
+# syntax=docker/dockerfile:1
+# Docker image for alpine using the alpine template
+ARG IMAGE_NAME="alpine"
+ARG PHP_SERVER="alpine"
+ARG BUILD_DATE="202408111050"
+ARG LANGUAGE="en_US.UTF-8"
+ARG TIMEZONE="America/New_York"
+ARG WWW_ROOT_DIR="/usr/local/share/httpd/default"
+ARG DEFAULT_FILE_DIR="/usr/local/share/template-files"
+ARG DEFAULT_DATA_DIR="/usr/local/share/template-files/data"
+ARG DEFAULT_CONF_DIR="/usr/local/share/template-files/config"
+ARG DEFAULT_TEMPLATE_DIR="/usr/local/share/template-files/defaults"
+
+ARG USER="root"
+ARG SHELL_OPTS="set -e -o pipefail"
+
+ARG SERVICE_PORT=""
+ARG EXPOSE_PORTS=""
+ARG PHP_VERSION="system"
+ARG NODE_VERSION="system"
+ARG NODE_MANAGER="system"
+
+ARG IMAGE_REPO="casjaysdev/alpine"
+ARG IMAGE_VERSION="3.22"
+ARG CONTAINER_VERSION=""
+
+ARG PULL_URL="alpine"
+ARG DISTRO_VERSION="${IMAGE_VERSION}"
+ARG BUILD_VERSION="${BUILD_DATE}"
+
+FROM tianon/gosu:latest AS gosu
+FROM ${PULL_URL}:${DISTRO_VERSION} AS build
+ARG TZ
+ARG USER
+ARG LICENSE
+ARG TIMEZONE
+ARG LANGUAGE
+ARG IMAGE_NAME
+ARG BUILD_DATE
+ARG SERVICE_PORT
+ARG BUILD_VERSION
+ARG SHELL_OPTS
+ARG DISTRO_VERSION
+ARG CONTAINER_VERSION
+
+ARG PACK_LIST="bash bash-completion git curl wget sudo unzip iproute2 sysvinit-utils tzdata ca-certificates ncurses util-linux pciutils usbutils net-tools coreutils "
+
+ENV ENV=~/.profile
+ENV SHELL="/bin/sh"
+ENV TZ="${TIMEZONE}"
+ENV TIMEZONE="${TZ}"
+ENV LANG="${LANGUAGE}"
+ENV TERM="xterm-256color"
+ENV PORT="${SERVICE_PORT}"
+ENV CONTAINER_NAME="${IMAGE_NAME}"
+ENV HOSTNAME="${CONTAINER_NAME}"
+ENV USER="${USER}"
+
+USER ${USER}
+WORKDIR /root
+
+COPY ./dockerfs/. /
+
+RUN set -e; \
+  echo 'Running initial scripts' && \
+  sh -c "INIT_DATE='${BUILD_DATE}' && export INIT_DATE && bash -c /root/docker/setup/00-init.sh" && \
+  echo 'Initial setup completed'
+
+RUN set -e; \
+  echo 'Installing packages' && \
+  apk update && apk add --no-cache ${PACK_LIST}
+
+RUN set -e; \
+  echo 'Running post install scripts' && \
+  bash -c "/root/docker/setup/01-packages.sh" && \
+  bash -c "/root/docker/setup/02-service.sh" && \
+  bash -c "/root/docker/setup/03-files.sh" && \
+  bash -c "/root/docker/setup/04-custom.sh" && \
+  echo 'Post install completed'
+
+FROM scratch
+ARG BUILD_DATE
+ARG IMAGE_NAME
+ARG TIMEZONE
+ARG LANGUAGE
+
+ENV ENV=~/.profile
+ENV SHELL="/bin/sh"
+ENV TZ="${TIMEZONE}"
+ENV TIMEZONE="${TZ}"
+ENV LANG="${LANGUAGE}"
+ENV TERM="xterm-256color"
+ENV CONTAINER_NAME="${IMAGE_NAME}"
+ENV HOSTNAME="${CONTAINER_NAME}"
+ENV USER="root"
+
+USER root
+WORKDIR /root
+
+LABEL org.opencontainers.image.vendor="CasjaysDev"
+LABEL org.opencontainers.image.title="${IMAGE_NAME}"
+LABEL org.opencontainers.image.base.name="${IMAGE_NAME}"
+LABEL org.opencontainers.image.description="Containerized version of ${IMAGE_NAME}"
+LABEL org.opencontainers.image.build-date="${BUILD_DATE}"
+LABEL org.opencontainers.image.authors="CasjaysDev <docker-admin@casjaysdev.pro>"
+
+COPY --from=gosu /usr/local/bin/gosu /usr/local/bin/gosu
+COPY --from=build / /
+
+VOLUME [ "/root","/data","/config" ]
+
+ENTRYPOINT [ "tini","--","/usr/local/bin/entrypoint.sh" ]
+HEALTHCHECK --interval=60s --timeout=30s --start-period=30s --retries=3 \
+  CMD [ "/usr/local/bin/entrypoint.sh", "healthcheck" ]
