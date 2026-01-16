@@ -31,6 +31,7 @@ jobs:
         run: |
           echo "BUILD_DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
           echo "DATE_TAG=$(date +'%y%m')" >> $GITHUB_OUTPUT
+          echo "COMMIT_ID=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -78,9 +79,10 @@ jobs:
             org.opencontainers.image.authors=CasjaysDev <docker-admin@casjaysdev.pro>
             org.opencontainers.image.url=https://github.com/${{ github.repository }}
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.version=3.22
+            org.opencontainers.image.version=latest
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.DATE_TAG }}
+            ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.COMMIT_ID }}
