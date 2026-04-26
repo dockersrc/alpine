@@ -62,13 +62,13 @@ WORKDIR /root
 COPY ./dockerfs/. /
 
 RUN set -e; \
+  echo 'Installing packages' && \
+  apk update && apk add --no-cache ${PACK_LIST}
+
+RUN set -e; \
   echo 'Running initial scripts' && \
   sh -c "INIT_DATE='${BUILD_DATE}' && export INIT_DATE && bash -c /root/docker/setup/00-init.sh" && \
   echo 'Initial setup completed'
-
-RUN set -e; \
-  echo 'Installing packages' && \
-  apk update && apk add --no-cache ${PACK_LIST}
 
 RUN set -e; \
   echo 'Running post install scripts' && \
