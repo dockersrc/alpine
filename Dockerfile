@@ -21,7 +21,7 @@ ARG NODE_VERSION="system"
 ARG NODE_MANAGER="system"
 
 ARG IMAGE_REPO="casjaysdev/alpine"
-ARG IMAGE_VERSION="3.22"
+ARG IMAGE_VERSION="latest"
 ARG CONTAINER_VERSION=""
 
 ARG PULL_URL="alpine"
@@ -43,7 +43,7 @@ ARG SHELL_OPTS
 ARG DISTRO_VERSION
 ARG CONTAINER_VERSION
 
-ARG PACK_LIST="bash bash-completion git curl wget sudo unzip iproute2 sysvinit-utils tzdata ca-certificates ncurses util-linux pciutils usbutils net-tools coreutils "
+ARG PACK_LIST="bash bash-completion git curl wget sudo unzip iproute2 openrc tzdata ca-certificates ncurses util-linux pciutils usbutils net-tools coreutils "
 
 ENV ENV=~/.profile
 ENV SHELL="/bin/sh"
