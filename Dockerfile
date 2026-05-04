@@ -72,10 +72,10 @@ RUN set -e; \
 
 RUN set -e; \
   echo 'Running post install scripts' && \
-  bash -c "/root/docker/setup/01-packages.sh" && \
-  bash -c "/root/docker/setup/02-service.sh" && \
-  bash -c "/root/docker/setup/03-files.sh" && \
-  bash -c "/root/docker/setup/04-custom.sh" && \
+  if [ -f "/root/docker/setup/02-packages.sh" ]; then bash -c "/root/docker/setup/02-packages.sh"; fi && \
+  if [ -f "/root/docker/setup/03-files.sh" ]; then bash -c "/root/docker/setup/03-files.sh"; fi && \
+  if [ -f "/root/docker/setup/04-users.sh" ]; then bash -c "/root/docker/setup/04-users.sh"; fi && \
+  if [ -f "/root/docker/setup/05-custom.sh" ]; then bash -c "/root/docker/setup/05-custom.sh"; fi && \
   echo 'Post install completed'
 
 FROM scratch
