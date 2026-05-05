@@ -59,7 +59,7 @@ ENV USER="${USER}"
 USER ${USER}
 WORKDIR /root
 
-COPY ./dockerfs/. /
+COPY ./rootfs/. /
 
 RUN set -e; \
   echo 'Installing packages' && \
