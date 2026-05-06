@@ -63,7 +63,7 @@ COPY ./rootfs/. /
 
 RUN set -e; \
   echo 'Installing packages' && \
-  apk update && apk add --no-cache ${PACK_LIST}
+  apk update && apk upgrade --no-cache && apk add --no-cache ${PACK_LIST}
 
 RUN set -e; \
   echo 'Running initial scripts' && \
