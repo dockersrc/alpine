@@ -43,7 +43,7 @@ ARG SHELL_OPTS
 ARG DISTRO_VERSION
 ARG CONTAINER_VERSION
 
-ARG PACK_LIST="bash tini bash-completion git curl wget sudo unzip iproute2 openrc ssmtp openssl jq tzdata mailcap ncurses util-linux pciutils usbutils coreutils binutils findutils grep rsync zip py3-pip procps net-tools sed gawk attr readline lsof less shadow certbot ca-certificates "
+ARG PACK_LIST="bash tini bash-completion git curl wget sudo unzip iproute2 openrc ssmtp openssl jq tzdata mailcap ncurses util-linux pciutils usbutils coreutils binutils findutils grep rsync zip py3-pip procps net-tools sed gawk attr readline lsof less shadow ca-certificates "
 
 ENV ENV=~/.profile
 ENV SHELL="/bin/sh"
