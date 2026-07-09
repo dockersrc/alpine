@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
 # - - - - - - - - - - - - - - - - - - - - - - - - -
-##@Version           :  202606261500-git
+##@Version           :  202606272100-git
 # @@Author           :  Jason Hempstead
 # @@Contact          :  jason@casjaysdev.pro
 # @@License          :  WTFPL
 # @@ReadME           :  entrypoint.sh --help
 # @@Copyright        :  Copyright: (c) 2026 Jason Hempstead, Casjays Developments
-# @@Created          :  Friday, Jun 05, 2026 18:22 EDT
+# @@Created          :  Wednesday, Jul 08, 2026 18:59 EDT
 # @@File             :  entrypoint.sh
 # @@Description      :  Entrypoint file for alpine
 # @@Changelog        :  New script
@@ -123,7 +123,7 @@ export PATH RUNAS_USER SERVICE_USER SERVICE_GROUP SERVICE_UID SERVICE_GID WWW_RO
 # show message
 __run_message() {
 
-  return
+  return 0
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - -
 ################## END OF CONFIGURATION #####################
@@ -370,7 +370,7 @@ if [ "$ENTRYPOINT_FIRST_RUN" != "no" ]; then
   # - - - - - - - - - - - - - - - - - - - - - - - - -
   # import hosts file into container
   if [ -f "/usr/local/etc/hosts" ] && [ "$UPDATE_FILE_HOSTS" = "yes" ]; then
-    grep -vF "$HOSTNAME" "/usr/local/etc/hosts" 2>/dev/null >>"/etc/hosts" || true
+    grep -vF -- "$HOSTNAME" "/usr/local/etc/hosts" 2>/dev/null >>"/etc/hosts" || true
   fi
   # - - - - - - - - - - - - - - - - - - - - - - - - -
   # import resolv.conf file into container
@@ -422,8 +422,8 @@ if [ "$ENTRYPOINT_FIRST_RUN" != "no" ] || [ "$CONFIG_DIR_INITIALIZED" = "no" ] |
     echo "Initialized on: $INIT_DATE" >"$ENTRYPOINT_INIT_FILE" 2>/dev/null || true
   fi
   # - - - - - - - - - - - - - - - - - - - - - - - - -
-  # setup the smtp server — non-fatal; this image does not use ssmtp
-  __setup_mta || true
+  # setup the smtp server
+  __setup_mta
   # - - - - - - - - - - - - - - - - - - - - - - - - -
   ENTRYPOINT_FIRST_RUN="no"
 fi
@@ -576,7 +576,7 @@ healthcheck)
         services+="$name "
       done
     fi
-    services="$(printf '%s\n' $services | sort -u | grep -v '^$')"
+    services="$(printf '%s\n' $services | sort -u | grep -v -- '^$')"
     for proc in $services; do
       if [ -n "$proc" ]; then
         if ! __pgrep "$proc"; then
@@ -587,7 +587,7 @@ healthcheck)
     done
     for port in $healthPorts; do
       if command -v netstat &>/dev/null && [ -n "$port" ]; then
-        if ! netstat -taupln | grep -q ":$port "; then
+        if ! netstat -taupln | grep -q -- ":$port "; then
           echo "$port isn't open" >&2
           healthStatus=$((healthStatus + 1))
         fi
@@ -617,7 +617,7 @@ ports)
   # show running processes
 procs)
   shift 1
-  ps="$(__ps axco command 2>/dev/null | grep -vE '^(COMMAND|grep|ps)$' | sort -u)"
+  ps="$(__ps axco command 2>/dev/null | grep -vE -- '^(COMMAND|grep|ps)$' | sort -u)"
   [ -n "$ps" ] && printf '%s\n%s\n' "Found the following processes" "$ps" | tr '\n' ' '
   exit $?
   ;;
