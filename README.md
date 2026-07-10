@@ -19,17 +19,17 @@ dockermgr update os alpine
 ## Install and run container
   
 ```shell
-mkdir -p "/var/lib/srv/root/docker/casjaysdev/alpine/latest"
+mkdir -p "/srv/root/docker/casjaysdev/alpine/latest"
 git clone "https://github.com/dockermgr/alpine" "$HOME/.local/share/CasjaysDev/dockermgr/alpine"
-cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/alpine/rootfs/." "/var/lib/srv/root/docker/casjaysdev/alpine/latest/"
+cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/alpine/rootfs/." "/srv/root/docker/casjaysdev/alpine/latest/"
 docker run -d \
 --restart always \
 --privileged \
 --name casjaysdev-alpine-latest \
 --hostname alpine \
 -e TZ=${TIMEZONE:-America/New_York} \
--v "/var/lib/srv/root/docker/casjaysdev/alpine/latest/data:/data:z" \
--v "/var/lib/srv/root/docker/casjaysdev/alpine/latest/config:/config:z" \
+-v "/srv/root/docker/casjaysdev/alpine/latest/data:/data:z" \
+-v "/srv/root/docker/casjaysdev/alpine/latest/config:/config:z" \
 casjaysdev/alpine:latest
 ```
   
@@ -45,8 +45,8 @@ services:
       - TZ=America/New_York
       - HOSTNAME=alpine
     volumes:
-      - "/var/lib/srv/root/docker/casjaysdev/alpine/latest/data:/data:z"
-      - "/var/lib/srv/root/docker/casjaysdev/alpine/latest/config:/config:z"
+      - "/srv/root/docker/casjaysdev/alpine/latest/data:/data:z"
+      - "/srv/root/docker/casjaysdev/alpine/latest/config:/config:z"
     restart: always
 ```
   
