@@ -540,8 +540,8 @@ dockermgr update {name}
 ## Install and run container
 
 ```shell
-dockerHome="/srv/$USER/docker/casjaysdevdocker/{name}/{name}/latest/rootfs"
-mkdir -p "/srv/$USER/docker/{name}/rootfs"
+dockerHome="/var/lib/srv/$USER/docker/casjaysdevdocker/{name}/{name}/latest/rootfs"
+mkdir -p "/var/lib/srv/$USER/docker/{name}/rootfs"
 git clone "https://github.com/dockermgr/{name}" "$HOME/.local/share/CasjaysDev/dockermgr/{name}"
 cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/{name}/rootfs/." "$dockerHome/"
 docker run -d \
@@ -568,8 +568,8 @@ services:
       - TZ=America/New_York
       - HOSTNAME={name}
     volumes:
-      - "/srv/$USER/docker/casjaysdevdocker/{name}/{name}/latest/rootfs/data:/data:z"
-      - "/srv/$USER/docker/casjaysdevdocker/{name}/{name}/latest/rootfs/config:/config:z"
+      - "/var/lib/srv/$USER/docker/casjaysdevdocker/{name}/{name}/latest/rootfs/data:/data:z"
+      - "/var/lib/srv/$USER/docker/casjaysdevdocker/{name}/{name}/latest/rootfs/config:/config:z"
     ports:
       - {port}:{port}
     restart: always
@@ -624,17 +624,17 @@ dockermgr update os {name}
 ## Install and run container
 
 ```shell
-mkdir -p "/srv/root/docker/casjaysdev/{name}/latest"
+mkdir -p "/var/lib/srv/root/docker/casjaysdev/{name}/latest"
 git clone "https://github.com/dockermgr/{name}" "$HOME/.local/share/CasjaysDev/dockermgr/{name}"
-cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/{name}/rootfs/." "/srv/root/docker/casjaysdev/{name}/latest/"
+cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/{name}/rootfs/." "/var/lib/srv/root/docker/casjaysdev/{name}/latest/"
 docker run -d \
 --restart always \
 --privileged \
 --name casjaysdev-{name}-latest \
 --hostname {name} \
 -e TZ=${TIMEZONE:-America/New_York} \
--v "/srv/root/docker/casjaysdev/{name}/latest/data:/data:z" \
--v "/srv/root/docker/casjaysdev/{name}/latest/config:/config:z" \
+-v "/var/lib/srv/root/docker/casjaysdev/{name}/latest/data:/data:z" \
+-v "/var/lib/srv/root/docker/casjaysdev/{name}/latest/config:/config:z" \
 casjaysdev/{name}:latest
 ```
 
@@ -650,8 +650,8 @@ services:
       - TZ=America/New_York
       - HOSTNAME={name}
     volumes:
-      - "/srv/root/docker/casjaysdev/{name}/latest/data:/data:z"
-      - "/srv/root/docker/casjaysdev/{name}/latest/config:/config:z"
+      - "/var/lib/srv/root/docker/casjaysdev/{name}/latest/data:/data:z"
+      - "/var/lib/srv/root/docker/casjaysdev/{name}/latest/config:/config:z"
     restart: always
 ```
 
